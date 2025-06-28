@@ -2,6 +2,7 @@ package com.example.coolweather;
 
 import androidx.fragment.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +18,12 @@ import android.widget.Toast;
 
 import com.example.coolweather.db.City;
 import com.example.coolweather.db.County;
+import com.example.coolweather.db.FavoriteCity;
 import com.example.coolweather.db.Province;
 import com.example.coolweather.util.HttpUtil;
 import com.example.coolweather.util.Utility;
 
+import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
@@ -111,6 +114,24 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(position).getWeatherId();
                     if (getActivity() instanceof MainActivity) {
+                        ContentValues values = new ContentValues();
+                        values.put("isCurrent", 0);
+                        DataSupport.updateAll(FavoriteCity.class, values);
+
+
+                        // 获取或创建当前选择的城市
+                        FavoriteCity city = LitePal.where("weatherId = ?", weatherId).findFirst(FavoriteCity.class);
+                        if (city == null) {
+                            city = new FavoriteCity();
+                            city.setCityName(countyList.get(position).getCountyName());
+                            city.setWeatherId(weatherId);
+                            city.setIsCurrent(1);
+                            city.save();
+                        } else {
+                            city.setIsCurrent(1);
+                            city.save();
+                        }
+
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
                         intent.putExtra("weather_id", weatherId);
                         startActivity(intent);

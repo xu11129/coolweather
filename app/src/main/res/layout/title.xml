@@ -6,8 +6,8 @@
 
     <Button
         android:id="@+id/nav_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
@@ -20,6 +20,14 @@
         android:layout_centerInParent="true"
         android:textColor="#fff"
         android:textSize="32sp" />
+    <Button
+        android:id="@+id/my_cities_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_my_cities" />
 
     <TextView
         android:id="@+id/title_update_time"

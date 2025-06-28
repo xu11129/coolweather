@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <!-- 天气背景 -->
+        <ImageView
+            android:id="@+id/weather_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_sunny" />
+
+        <!-- 城市信息层 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <!-- 天气图标 -->
+            <ImageView
+                android:id="@+id/weather_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_sunny" />
+
+            <!-- 城市名称+温度 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/city_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#020202"
+                    android:textSize="26sp" />
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="1dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#020202"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="℃"
+                        android:textColor="#020202"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 删除按钮 -->
+            <ImageView
+                android:id="@+id/delete_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right|center_vertical"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

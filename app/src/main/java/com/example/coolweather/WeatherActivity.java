@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.core.view.GravityCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.coolweather.db.FavoriteCity;
 import com.example.coolweather.gson.Forecast;
 import com.example.coolweather.gson.Weather;
 import com.example.coolweather.service.AutoUpdateService;
@@ -32,6 +35,7 @@ import com.example.coolweather.util.Utility;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.LitePal;
 
 import java.io.IOException;
 
@@ -73,6 +77,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     private String mWeatherId;
 
+    private Button myCitiesBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,10 +131,18 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(() -> requestWeather(mWeatherId));
 
         navButton.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-
+        myCitiesBtn = findViewById(R.id.my_cities_btn);
+        myCitiesBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FavoriteCitiesActivity.class);
+            startActivity(intent);
+        });
         String bingPic = prefs.getString("bing_pic", null);
         if (bingPic != null) {
-            Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
+            Glide.with(WeatherActivity.this)
+                    .load(bingPic)
+                    .override(1080, 1920) // 根据设备分辨率调整
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(bingPicImg);
         } else {
             loadBingPic();
         }
@@ -268,5 +281,26 @@ public class WeatherActivity extends AppCompatActivity {
         weatherLayout.setVisibility(View.VISIBLE);
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
+        // 更新收藏城市信息
+        updateFavoriteCity(weather);
+    }
+    private void updateFavoriteCity(Weather weather) {
+        FavoriteCity currentCity = LitePal.where("isCurrent = ?", "1").findFirst(FavoriteCity.class);
+
+        if (currentCity != null) {
+            // 更新当前城市信息
+            currentCity.setTemperature(weather.now.temperature);
+            currentCity.setWeatherInfo(weather.now.more.info);
+            currentCity.save();
+        } else {
+            // 添加当前城市到收藏列表
+            currentCity = new FavoriteCity();
+            currentCity.setCityName(weather.basic.cityName);
+            currentCity.setWeatherId(weather.basic.weatherId);
+            currentCity.setTemperature(weather.now.temperature);
+            currentCity.setWeatherInfo(weather.now.more.info);
+            currentCity.setIsCurrent(1);
+            currentCity.save();
+        }
     }
 }

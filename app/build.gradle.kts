@@ -59,7 +59,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.1")
 
     // SwipeRefreshLayout
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // DrawerLayout
     implementation("androidx.drawerlayout:drawerlayout:1.1.1")
